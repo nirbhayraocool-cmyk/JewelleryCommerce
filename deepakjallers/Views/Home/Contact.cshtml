@@ -1,0 +1,293 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<!-- HERO -->
+<section class="bg-cream py-5">
+    <div class="container text-center py-4">
+        <span class="badge bg-white text-gold border border-warning mb-3 px-3 py-2">
+            ◆ Get in Touch
+        </span>
+        <h1 class="display-4 fw-bold" style="font-family: Georgia, serif;">
+            We'd Love to Hear From You
+        </h1>
+        <p class="text-muted fs-5 mx-auto" style="max-width: 600px;">
+            Koi sawal, suggestion ya complaint? Hamein message bhejo —
+            hum 24 ghante ke andar reply karenge.
+        </p>
+    </div>
+</section>
+
+<!-- CONTACT INFO CARDS -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm text-center p-4 h-100">
+                    <div class="mb-3">
+                        <i class="bi bi-telephone-fill text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold" style="font-family: Georgia, serif;">Call Us</h5>
+                    <p class="text-muted mb-1">
+                        <i class="bi bi-telephone text-gold me-1"></i> +91 98765 43210
+                    </p>
+                    <p class="text-muted mb-0">
+                        <i class="bi bi-telephone text-gold me-1"></i> +91 98765 43211
+                    </p>
+                    <small class="text-muted d-block mt-2">
+                        <i class="bi bi-clock text-gold"></i> Mon-Sat, 10 AM - 7 PM
+                    </small>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm text-center p-4 h-100">
+                    <div class="mb-3">
+                        <i class="bi bi-envelope-fill text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold" style="font-family: Georgia, serif;">Email Us</h5>
+                    <p class="text-muted mb-1">
+                        <i class="bi bi-envelope text-gold me-1"></i> support@deepakjewellers.com
+                    </p>
+                    <p class="text-muted mb-0">
+                        <i class="bi bi-envelope text-gold me-1"></i> info@deepakjewellers.com
+                    </p>
+                    <small class="text-muted d-block mt-2">
+                        <i class="bi bi-clock-history text-gold"></i> Reply within 24 hours
+                    </small>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm text-center p-4 h-100">
+                    <div class="mb-3">
+                        <i class="bi bi-geo-alt-fill text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold" style="font-family: Georgia, serif;">Visit Us</h5>
+                    <p class="text-muted mb-1">
+                        <i class="bi bi-building text-gold me-1"></i> 123, MG Road, Fort
+                    </p>
+                    <p class="text-muted mb-0">
+                        <i class="bi bi-pin-map text-gold me-1"></i> Mumbai, MH — 400001
+                    </p>
+                    <small class="text-muted d-block mt-2">
+                        <i class="bi bi-clock text-gold"></i> Mon-Sat, 10 AM - 8 PM
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FORM + INFO -->
+<section class="py-5 bg-cream">
+    <div class="container">
+        <div class="row g-5">
+
+            <!-- FORM -->
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-lg-5">
+                        <h2 class="fw-bold mb-1" style="font-family: Georgia, serif;">
+                            <i class="bi bi-chat-dots text-gold"></i> Send Us a Message
+                        </h2>
+                        <p class="text-muted small mb-4">
+                            Fill the form below and our team will get back to you shortly.
+                        </p>
+
+                        @if (TempData["ContactSuccess"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show">
+                                <i class="bi bi-check-circle"></i> @TempData["ContactSuccess"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <form asp-controller="Home" asp-action="Contact" method="post">
+                            @Html.AntiForgeryToken()
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-person text-gold"></i> Full Name *
+                                    </label>
+                                    <input name="Name" class="form-control" placeholder="Rahul Sharma" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-envelope text-gold"></i> Email *
+                                    </label>
+                                    <input name="Email" type="email" class="form-control"
+                                           placeholder="you@example.com" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-telephone text-gold"></i> Phone
+                                    </label>
+                                    <input name="Phone" class="form-control" placeholder="9876543210" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-tag text-gold"></i> Subject *
+                                    </label>
+                                    <select name="Subject" class="form-select" required>
+                                        <option value="">— Select —</option>
+                                        <option value="Order Enquiry">Order Enquiry</option>
+                                        <option value="Product Question">Product Question</option>
+                                        <option value="Return / Refund">Return / Refund</option>
+                                        <option value="Become a Seller">Become a Seller</option>
+                                        <option value="Complaint">Complaint</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-pencil-square text-gold"></i> Message *
+                                    </label>
+                                    <textarea name="Message" rows="5" class="form-control"
+                                              placeholder="Apna message likhein..." required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-gold btn-lg px-5">
+                                        <i class="bi bi-send-fill"></i> Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFO SIDE -->
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4 p-lg-5">
+                        <h3 class="fw-bold mb-3" style="font-family: Georgia, serif;">
+                            <span class="text-gold">◆</span> Contact Info
+                        </h3>
+                        <p class="text-muted small mb-4">
+                            Kisi bhi sawal ke liye directly call ya email karein.
+                            Hum 24 ghante me reply karenge.
+                        </p>
+
+                        <div class="mb-4">
+                            <div class="d-flex align-items-start gap-3 mb-3 pb-3 border-bottom">
+                                <i class="bi bi-telephone-fill text-gold fs-4" style="width: 30px;"></i>
+                                <div>
+                                    <small class="text-muted d-block">Phone</small>
+                                    <strong>+91 98765 43210</strong>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-start gap-3 mb-3 pb-3 border-bottom">
+                                <i class="bi bi-envelope-fill text-gold fs-4" style="width: 30px;"></i>
+                                <div>
+                                    <small class="text-muted d-block">Email</small>
+                                    <strong>support@deepakjewellers.com</strong>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-start gap-3 mb-3 pb-3 border-bottom">
+                                <i class="bi bi-geo-alt-fill text-gold fs-4" style="width: 30px;"></i>
+                                <div>
+                                    <small class="text-muted d-block">Address</small>
+                                    <strong>123, MG Road, Mumbai, India</strong>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-start gap-3">
+                                <i class="bi bi-clock-fill text-gold fs-4" style="width: 30px;"></i>
+                                <div>
+                                    <small class="text-muted d-block">Working Hours</small>
+                                    <strong>Mon-Sat, 10 AM - 7 PM</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <p class="small text-muted mb-2">
+                            <i class="bi bi-share text-gold"></i> Follow us
+                        </p>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="btn btn-gold btn-sm rounded-circle" title="Facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                            <a href="#" class="btn btn-gold btn-sm rounded-circle" title="Instagram">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                            <a href="#" class="btn btn-gold btn-sm rounded-circle" title="Twitter">
+                                <i class="bi bi-twitter-x"></i>
+                            </a>
+                            <a href="#" class="btn btn-gold btn-sm rounded-circle" title="WhatsApp">
+                                <i class="bi bi-whatsapp"></i>
+                            </a>
+                            <a href="#" class="btn btn-gold btn-sm rounded-circle" title="YouTube">
+                                <i class="bi bi-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- FAQ MINI -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="font-family: Georgia, serif;">Quick FAQ</h2>
+            <div class="bg-gold mx-auto mt-2" style="width:60px;height:3px;"></div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h6 class="fw-bold">
+                        <i class="bi bi-question-circle-fill text-gold"></i>
+                        Order kitne din me deliver hoga?
+                    </h6>
+                    <p class="text-muted small mb-0">
+                        <i class="bi bi-truck text-gold"></i>
+                        5-7 business days me pura India me deliver hota hai. Insured shipping free hai.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h6 class="fw-bold">
+                        <i class="bi bi-question-circle-fill text-gold"></i>
+                        COD available hai?
+                    </h6>
+                    <p class="text-muted small mb-0">
+                        <i class="bi bi-cash-coin text-gold"></i>
+                        Haan, pura India me Cash on Delivery available hai. Koi advance payment nahi.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h6 class="fw-bold">
+                        <i class="bi bi-question-circle-fill text-gold"></i>
+                        Return policy kya hai?
+                    </h6>
+                    <p class="text-muted small mb-0">
+                        <i class="bi bi-arrow-repeat text-gold"></i>
+                        15-day easy return. Product unused aur original packaging me hona chahiye.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h6 class="fw-bold">
+                        <i class="bi bi-question-circle-fill text-gold"></i>
+                        Seller kaise ban sakte hain?
+                    </h6>
+                    <p class="text-muted small mb-0">
+                        <i class="bi bi-shop text-gold"></i>
+                        Register karo, "Become a Seller" click karo, KYC submit karo. Admin approve karega.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

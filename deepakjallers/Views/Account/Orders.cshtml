@@ -1,0 +1,79 @@
+﻿@model List<JewelleryCommerce.Web.Models.ViewModels.OrderListViewModel>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="container py-5">
+    <h2 class="fw-bold mb-4" style="font-family: Georgia, serif;">
+        <i class="bi bi-receipt text-gold"></i> My Orders
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5 bg-white border rounded">
+            <i class="bi bi-receipt text-muted" style="font-size: 4rem;"></i>
+            <h4 class="fw-bold mt-3">No orders yet</h4>
+            <p class="text-muted">Start shopping to see your orders here.</p>
+            <a asp-controller="Shop" asp-action="Index" class="btn btn-gold mt-2">
+                <i class="bi bi-bag"></i> Shop Now
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-column gap-3">
+            @foreach (var o in Model)
+            {
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center g-3">
+
+                            <div class="col-md-2">
+                                <img src="@o.FirstImageUrl" class="img-fluid rounded"
+                                     style="height: 80px; object-fit: cover;" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <small class="text-muted">Order</small>
+                                <div class="fw-bold">@o.OrderNumber</div>
+                                <small class="text-muted">@o.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</small>
+                            </div>
+
+                            <div class="col-md-2">
+                                <small class="text-muted d-block">Items</small>
+                                <strong>@o.ItemCount</strong>
+                            </div>
+
+                            <div class="col-md-2">
+                                <small class="text-muted d-block">Total</small>
+                                <strong class="text-gold">₹ @o.TotalAmount.ToString("N0")</strong>
+                            </div>
+
+                            <div class="col-md-2 text-md-end">
+                                <span class="badge @GetStatusBadge(o.Status) mb-2">@o.Status</span><br />
+                                <a asp-action="OrderDetails" asp-route-id="@o.Id"
+                                   class="btn btn-sm btn-outline-gold">
+                                    View <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@functions {
+    string GetStatusBadge(string status) => status switch
+    {
+        "Pending" => "bg-warning text-dark",
+        "Confirmed" => "bg-info text-dark",
+        "Packed" => "bg-primary",
+        "Shipped" => "bg-secondary",
+        "Delivered" => "bg-success",
+        "Cancelled" => "bg-danger",
+        "Returned" => "bg-dark",
+        _ => "bg-secondary"
+    };
+}

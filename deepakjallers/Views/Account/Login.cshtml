@@ -1,0 +1,82 @@
+﻿@model JewelleryCommerce.Web.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="bg-cream py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-lg-5">
+
+                        <div class="text-center mb-4">
+                            <h3 class="fw-bold" style="font-family: Georgia, serif;">
+                                <span class="text-gold">◆</span> Welcome Back
+                            </h3>
+                            <p class="text-muted small mb-0">Login to your Deepak Jewellers account</p>
+                        </div>
+
+                        <form asp-action="Login" method="post">
+                            <input type="hidden" asp-for="ReturnUrl" />
+
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger small py-2"></div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="bi bi-envelope"></i></span>
+                                    <input asp-for="Email" class="form-control" placeholder="you@example.com" />
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="bi bi-lock"></i></span>
+                                    <input asp-for="Password" class="form-control" placeholder="Your password" />
+                                </div>
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                            </div>
+
+                            <div class="form-check mb-4">
+                                <input asp-for="RememberMe" class="form-check-input" />
+                                <label class="form-check-label small" asp-for="RememberMe">Remember me</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-gold w-100 btn-lg">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </button>
+                        </form>
+
+                        <hr class="my-4" />
+
+                        <div class="text-center small">
+                            New customer?
+                            <a asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl"
+                               class="text-gold text-decoration-none fw-semibold">
+                                Create an account
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Demo Credentials -->
+                <div class="alert alert-light border mt-3 small">
+                    <strong>Demo accounts:</strong><br />
+                    Admin: <code>admin@aurajewels.com</code> / <code>Admin@123</code><br />
+                    Vendor: <code>vendor@aurajewels.com</code> / <code>Vendor@123</code><br />
+                    Customer: <code>customer@aurajewels.com</code> / <code>Customer@123</code>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

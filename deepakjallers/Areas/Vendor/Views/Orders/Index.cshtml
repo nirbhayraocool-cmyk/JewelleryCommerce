@@ -1,0 +1,105 @@
+﻿@model List<JewelleryCommerce.Web.Models.Entities.OrderItem>
+@{
+    ViewData["Title"] = "Orders";
+    var statusFilter = ViewBag.StatusFilter as string;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card stat-card">
+    <div class="card-header bg-white d-flex gap-2 flex-wrap">
+        <a href="/Vendor/Orders" class="btn btn-sm @(string.IsNullOrEmpty(statusFilter) ? "btn-gold" : "btn-outline-secondary")">All</a>
+        <a href="/Vendor/Orders?status=Pending" class="btn btn-sm @(statusFilter == "Pending" ? "btn-gold" : "btn-outline-secondary")">Pending</a>
+        <a href="/Vendor/Orders?status=Confirmed" class="btn btn-sm @(statusFilter == "Confirmed" ? "btn-gold" : "btn-outline-secondary")">Confirmed</a>
+        <a href="/Vendor/Orders?status=Packed" class="btn btn-sm @(statusFilter == "Packed" ? "btn-gold" : "btn-outline-secondary")">Packed</a>
+        <a href="/Vendor/Orders?status=Shipped" class="btn btn-sm @(statusFilter == "Shipped" ? "btn-gold" : "btn-outline-secondary")">Shipped</a>
+        <a href="/Vendor/Orders?status=Delivered" class="btn btn-sm @(statusFilter == "Delivered" ? "btn-gold" : "btn-outline-secondary")">Delivered</a>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-clean mb-0">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Product</th>
+                    <th>Customer</th>
+                    <th>Qty</th>
+                    <th>Your Earning</th>
+                    <th>Status</th>
+                    <th class="text-end">Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var oi in Model)
+                    {
+                        var img = oi.Product.Images.FirstOrDefault(x => x.IsPrimary)?.ImageUrl
+                        ?? oi.Product.Images.FirstOrDefault()?.ImageUrl
+                        ?? "https://via.placeholder.com/50";
+                        <tr>
+                            <td>
+                                <div class="fw-semibold">@oi.Order.OrderNumber</div>
+                                <small class="text-muted">@oi.Order.CreatedAt.ToString("dd MMM yyyy")</small>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2 align-items-center">
+                                    <img src="@img" style="width: 40px; height: 40px; object-fit: cover;"
+                                         class="rounded" />
+                                    <div class="small fw-semibold">@oi.Product.Title</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>@oi.Order.CustomerName</div>
+                                <small class="text-muted">@oi.Order.Phone</small>
+                            </td>
+                            <td>@oi.Quantity</td>
+                            <td class="fw-bold text-success">₹ @oi.VendorEarning.ToString("N0")</td>
+                            <td><span class="badge @GetStatusBadge(oi.Status.ToString())">@oi.Status</span></td>
+                            <td class="text-end">
+                                <form method="post" asp-action="UpdateStatus" class="d-flex gap-1 justify-content-end">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@oi.Id" />
+                                    <select name="status" class="form-select form-select-sm" style="width: auto;">
+                                        @foreach (var s in Enum.GetNames(typeof(JewelleryCommerce.Web.Models.Entities.OrderItemStatus)))
+                                        {
+                                            <option value="@s" selected="@(s == oi.Status.ToString())">@s</option>
+                                        }
+                                    </select>
+                                    <button class="btn btn-sm btn-gold">✓</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                            <p class="mt-2 mb-0">No orders yet</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@functions {
+    string GetStatusBadge(string status) => status switch
+    {
+        "Pending" => "bg-warning text-dark",
+        "Confirmed" => "bg-info text-dark",
+        "Packed" => "bg-primary",
+        "Shipped" => "bg-secondary",
+        "Delivered" => "bg-success",
+        "Cancelled" => "bg-danger",
+        _ => "bg-secondary"
+    };
+}

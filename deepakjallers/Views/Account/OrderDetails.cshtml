@@ -1,0 +1,85 @@
+﻿@model JewelleryCommerce.Web.Models.ViewModels.OrderDetailViewModel
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h2 class="fw-bold mb-0" style="font-family: Georgia, serif;">
+            <i class="bi bi-receipt text-gold"></i> Order Details
+        </h2>
+        <a asp-action="Orders" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Back to Orders
+        </a>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- LEFT: ITEMS -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>@Model.OrderNumber</strong><br />
+                        <small class="text-muted">@Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</small>
+                    </div>
+                    <span class="badge bg-info text-dark">@Model.Status</span>
+                </div>
+                <div class="card-body p-0">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="d-flex gap-3 p-3 border-bottom">
+                            <img src="@item.ImageUrl"
+                                 style="width: 80px; height: 80px; object-fit: cover;"
+                                 class="rounded border" />
+                            <div class="flex-grow-1">
+                                <small class="text-muted text-uppercase" style="font-size: 0.7rem;">
+                                    @item.VendorName
+                                </small>
+                                <h6 class="fw-bold mb-1">
+                                    <a asp-controller="Product" asp-action="Details" asp-route-slug="@item.Slug"
+                                       class="text-dark text-decoration-none">
+                                        @item.Title
+                                    </a>
+                                </h6>
+                                <div class="small">
+                                    ₹ @item.Price.ToString("N0") × @item.Quantity
+                                    <span class="badge bg-light text-dark border ms-2 small">@item.Status</span>
+                                </div>
+                            </div>
+                            <div class="fw-bold">₹ @item.LineTotal.ToString("N0")</div>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer bg-white text-end">
+                    <strong>Total: <span class="text-gold fs-5">₹ @Model.TotalAmount.ToString("N0")</span></strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: INFO -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-geo-alt text-gold"></i> Shipping Address</h6>
+                    <div class="small">
+                        <strong>@Model.CustomerName</strong><br />
+                        @Model.ShippingAddress<br />
+                        Pincode: @Model.Pincode<br />
+                        <i class="bi bi-telephone"></i> @Model.Phone
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-credit-card text-gold"></i> Payment</h6>
+                    <div class="small">
+                        Method: <strong>@Model.PaymentMode</strong><br />
+                        Status: <strong>Pending (Pay on Delivery)</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>      

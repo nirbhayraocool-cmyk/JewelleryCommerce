@@ -1,0 +1,74 @@
+﻿@model List<JewelleryCommerce.Web.Models.Entities.Order>
+@{
+    ViewData["Title"] = "Orders";
+    var statusFilter = ViewBag.StatusFilter as string;
+}
+
+<div class="card stat-card">
+    <div class="card-header bg-white d-flex gap-2 flex-wrap">
+        <a href="/Admin/Orders" class="btn btn-sm @(string.IsNullOrEmpty(statusFilter) ? "btn-gold" : "btn-outline-secondary")">All</a>
+        <a href="/Admin/Orders?status=Pending" class="btn btn-sm @(statusFilter == "Pending" ? "btn-gold" : "btn-outline-secondary")">Pending</a>
+        <a href="/Admin/Orders?status=Confirmed" class="btn btn-sm @(statusFilter == "Confirmed" ? "btn-gold" : "btn-outline-secondary")">Confirmed</a>
+        <a href="/Admin/Orders?status=Packed" class="btn btn-sm @(statusFilter == "Packed" ? "btn-gold" : "btn-outline-secondary")">Packed</a>
+        <a href="/Admin/Orders?status=Shipped" class="btn btn-sm @(statusFilter == "Shipped" ? "btn-gold" : "btn-outline-secondary")">Shipped</a>
+        <a href="/Admin/Orders?status=Delivered" class="btn btn-sm @(statusFilter == "Delivered" ? "btn-gold" : "btn-outline-secondary")">Delivered</a>
+        <a href="/Admin/Orders?status=Cancelled" class="btn btn-sm @(statusFilter == "Cancelled" ? "btn-gold" : "btn-outline-secondary")">Cancelled</a>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-clean mb-0">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var o in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@o.OrderNumber</td>
+                            <td>
+                                <div>@o.CustomerName</div>
+                                <small class="text-muted">@o.Phone</small>
+                            </td>
+                            <td>@o.CreatedAt.ToString("dd MMM yyyy")</td>
+                            <td class="fw-bold text-gold">₹ @o.TotalAmount.ToString("N0")</td>
+                            <td><span class="badge bg-light text-dark border">@o.PaymentMode</span></td>
+                            <td><span class="badge @GetStatusBadge(o.Status.ToString())">@o.Status</span></td>
+                            <td class="text-end">
+                                <a href="/Admin/Orders/Details/@o.Id" class="btn btn-sm btn-outline-gold">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="7" class="text-center text-muted py-4">No orders found</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@functions {
+    string GetStatusBadge(string status) => status switch
+    {
+        "Pending" => "bg-warning text-dark",
+        "Confirmed" => "bg-info text-dark",
+        "Packed" => "bg-primary",
+        "Shipped" => "bg-secondary",
+        "Delivered" => "bg-success",
+        "Cancelled" => "bg-danger",
+        "Returned" => "bg-dark",
+        _ => "bg-secondary"
+    };
+}

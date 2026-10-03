@@ -1,0 +1,199 @@
+﻿@model JewelleryCommerce.Web.Models.ViewModels.VendorDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="alert alert-light border d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <strong>@Model.ShopName</strong>
+        <div class="small text-muted">Commission Rate: @Model.CommissionRate%</div>
+    </div>
+    <div class="text-end small text-muted">
+        Your earnings = (Product Price) × (100 − @Model.CommissionRate)%
+    </div>
+</div>
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon bg-success-subtle text-success"><i class="bi bi-currency-rupee"></i></div>
+                <div>
+                    <small class="text-muted">Total Earnings</small>
+                    <h4 class="fw-bold mb-0">₹ @Model.TotalEarnings.ToString("N0")</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon bg-warning-subtle text-warning"><i class="bi bi-hourglass-split"></i></div>
+                <div>
+                    <small class="text-muted">Pending</small>
+                    <h4 class="fw-bold mb-0">₹ @Model.PendingEarnings.ToString("N0")</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon bg-primary-subtle text-primary"><i class="bi bi-truck"></i></div>
+                <div>
+                    <small class="text-muted">Paid Out</small>
+                    <h4 class="fw-bold mb-0">₹ @Model.PaidEarnings.ToString("N0")</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon bg-info-subtle text-info"><i class="bi bi-receipt"></i></div>
+                <div>
+                    <small class="text-muted">Total Orders</small>
+                    <h4 class="fw-bold mb-0">@Model.TotalOrders</h4>
+                    @if (Model.PendingOrders > 0)
+                    {
+                        <small class="text-warning">@Model.PendingOrders pending</small>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Products + Orders mini -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <small class="text-muted">Products</small>
+            <h4 class="fw-bold mb-0">@Model.TotalProducts</h4>
+            <div class="small mt-1">
+                <span class="text-success">@Model.ApprovedProducts approved</span>
+                @if (Model.PendingProducts > 0)
+                {
+                    <span class="text-warning ms-2">@Model.PendingProducts pending</span>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <small class="text-muted">Delivered Orders</small>
+            <h4 class="fw-bold mb-0">@Model.DeliveredOrders</h4>
+            <div class="small text-muted mt-1">Completed successfully</div>
+        </div>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="/Vendor/Products/Create" class="btn btn-gold">
+            <i class="bi bi-plus-circle"></i> Add New Product
+        </a>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Recent Orders -->
+    <div class="col-lg-7">
+        <div class="card stat-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <strong><i class="bi bi-clock-history"></i> Recent Orders</strong>
+                <a href="/Vendor/Orders" class="small text-gold text-decoration-none">View all →</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-clean mb-0">
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Product</th>
+                            <th>Earning</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.RecentOrders.Any())
+                        {
+                            @foreach (var o in Model.RecentOrders)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold">@o.OrderNumber</div>
+                                        <small class="text-muted">@o.CustomerName</small>
+                                    </td>
+                                    <td>
+                                        <div>@o.ProductTitle</div>
+                                        <small class="text-muted">Qty: @o.Quantity</small>
+                                    </td>
+                                    <td class="fw-bold text-success">₹ @o.VendorEarning.ToString("N0")</td>
+                                    <td><span class="badge @GetStatusBadge(o.Status)">@o.Status</span></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4" class="text-center text-muted py-4">No orders yet</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="col-lg-5">
+        <div class="card stat-card">
+            <div class="card-header bg-white">
+                <strong><i class="bi bi-trophy"></i> Top Products</strong>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-clean mb-0">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Sold</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.TopProducts.Any())
+                        {
+                            @foreach (var p in Model.TopProducts)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img src="@p.ImageUrl" style="width: 40px; height: 40px; object-fit: cover;"
+                                                 class="rounded" />
+                                            <div class="small fw-semibold">@p.Title</div>
+                                        </div>
+                                    </td>
+                                    <td>@p.SoldCount</td>
+                                    <td class="fw-bold text-gold">₹ @p.Revenue.ToString("N0")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="3" class="text-center text-muted py-4">No sales yet</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusBadge(string status) => status switch
+    {
+        "Pending" => "bg-warning text-dark",
+        "Confirmed" => "bg-info text-dark",
+        "Packed" => "bg-primary",
+        "Shipped" => "bg-secondary",
+        "Delivered" => "bg-success",
+        "Cancelled" => "bg-danger",
+        _ => "bg-secondary"
+    };
+}

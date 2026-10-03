@@ -1,0 +1,215 @@
+﻿@model List<JewelleryCommerce.Web.Models.Entities.Product>
+@{
+    ViewData["Title"] = "Home";
+    var categories = ViewBag.Categories as List<JewelleryCommerce.Web.Models.Entities.Category>;
+}
+
+<!-- HERO -->
+<section class="bg-cream py-5">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6">
+                <span class="badge bg-white text-gold border border-warning mb-3 px-3 py-2">
+                    ◆ Certified Jewellery Marketplace
+                </span>
+                <h1 class="display-4 fw-bold lh-1" style="font-family: Georgia, serif;">
+                    Timeless Jewellery,<br />Trusted Sellers
+                </h1>
+                <p class="text-muted my-3 fs-5">
+                    Gold, Silver aur Diamond — India ke verified vendors se.
+                    Hallmarked quality, transparent pricing aur Cash on Delivery.
+                </p>
+                <div class="d-flex gap-3 mt-4 flex-wrap">
+                    <a asp-controller="Shop" asp-action="Index" class="btn btn-gold btn-lg px-4">
+                        Shop Collection <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <a href="#categories" class="btn btn-outline-gold btn-lg px-4">Explore Categories</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600"
+                     class="img-fluid rounded-4 shadow-lg" alt="Jewellery" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="bg-cream border-top border-bottom py-4">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-3 col-6">
+                <i class="bi bi-patch-check text-gold fs-1"></i>
+                <h6 class="fw-bold mt-2 mb-0">Hallmarked</h6>
+                <small class="text-muted">BIS Certified</small>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-truck text-gold fs-1"></i>
+                <h6 class="fw-bold mt-2 mb-0">Free Shipping</h6>
+                <small class="text-muted">Above ₹5,000</small>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-cash-coin text-gold fs-1"></i>
+                <h6 class="fw-bold mt-2 mb-0">COD Available</h6>
+                <small class="text-muted">Pay on Delivery</small>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-arrow-repeat text-gold fs-1"></i>
+                <h6 class="fw-bold mt-2 mb-0">Easy Returns</h6>
+                <small class="text-muted">15 Days Policy</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="font-family: Georgia, serif;">Shop By Category</h2>
+            <div class="bg-gold mx-auto mt-2" style="width:60px;height:3px;"></div>
+        </div>
+        <div class="row g-4">
+            @if (categories != null)
+            {
+                @foreach (var c in categories)
+                {
+                    <div class="col-md-4">
+                        <a asp-controller="Shop" asp-action="Index" asp-route-cat="@c.Slug"
+                           class="text-decoration-none">
+                            <div class="card border-0 shadow-sm h-100">
+                                <img src="@c.ImageUrl" class="card-img-top category-img" alt="@c.Name" />
+                                <div class="card-body text-center">
+                                    <h5 class="fw-bold text-dark mb-1" style="font-family: Georgia, serif;">
+                                        @c.Name Jewellery
+                                    </h5>
+                                    <small class="text-muted">
+                                        @(c.Slug == "gold" ? "22K & 18K Certified"
+                                                                        : c.Slug == "silver" ? "925 Sterling Silver"
+                                                                        : "IGI & GIA Certified")
+                            </small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+                        }
+            }
+        </div>
+    </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="py-5 bg-cream">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="font-family: Georgia, serif;">Featured Collection</h2>
+            <div class="bg-gold mx-auto mt-2" style="width:60px;height:3px;"></div>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-4">
+                @foreach (var p in Model)
+                {
+                    var primaryImage = p.Images.FirstOrDefault(i => i.IsPrimary)?.ImageUrl
+                    ?? p.Images.FirstOrDefault()?.ImageUrl
+                    ?? "https://via.placeholder.com/400";
+                    var discount = p.Mrp > p.Price
+                    ? (int)Math.Round((1 - (double)(p.Price / p.Mrp)) * 100) : 0;
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card border-0 shadow-sm h-100 position-relative">
+                            <div class="position-relative overflow-hidden">
+                                @if (p.IsBestseller)
+                                {
+                                    <span class="badge badge-gold position-absolute top-0 start-0 m-2">BESTSELLER</span>
+                                }
+                                <button class="btn btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                                <a asp-controller="Product" asp-action="Details" asp-route-slug="@p.Slug">
+                                    <img src="@primaryImage" class="card-img-top product-img" alt="@p.Title" />
+                                </a>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <small class="text-muted text-uppercase" style="font-size: 0.7rem;">
+                                    @p.Vendor.ShopName
+                                </small>
+                                <h6 class="fw-bold mt-1 mb-2" style="font-family: Georgia, serif;">
+                                    <a asp-controller="Product" asp-action="Details" asp-route-slug="@p.Slug"
+                                       class="text-dark text-decoration-none">
+                                        @p.Title
+                                    </a>
+                                </h6>
+                                <div class="mb-1">
+                                    <span class="text-gold fw-bold fs-5">₹ @p.Price.ToString("N0")</span>
+                                    @if (discount > 0)
+                                    {
+                                        <span class="text-muted text-decoration-line-through ms-1 small">
+                                            ₹ @p.Mrp.ToString("N0")
+                                        </span>
+                                    }
+                                </div>
+                                <div class="text-muted small mb-2">
+                                    <i class="bi bi-star-fill text-warning"></i> @p.Rating.ToString("0.0")
+                                    · @p.Weight g · @p.Purity
+                                </div>
+                                <button class="btn btn-gold w-100 mt-auto">
+                                    <i class="bi bi-bag-plus"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="text-center mt-5">
+                <a asp-controller="Shop" asp-action="Index" class="btn btn-outline-gold btn-lg px-4">
+                    View All Products <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-muted">No featured products yet.</p>
+        }
+    </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="font-family: Georgia, serif;">Why Deepak Jewellers?</h2>
+            <div class="bg-gold mx-auto mt-2" style="width:60px;height:3px;"></div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center p-4">
+                    <i class="bi bi-shield-check text-gold" style="font-size: 2.5rem;"></i>
+                    <h5 class="fw-bold mt-3" style="font-family: Georgia, serif;">Verified Vendors</h5>
+                    <p class="text-muted small mb-0">
+                        Har seller KYC aur GST verified hai. Fake products ki tension khatam.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center p-4">
+                    <i class="bi bi-currency-rupee text-gold" style="font-size: 2.5rem;"></i>
+                    <h5 class="fw-bold mt-3" style="font-family: Georgia, serif;">Best Price Guarantee</h5>
+                    <p class="text-muted small mb-0">
+                        Multiple sellers compare karke sabse best rate milta hai.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center p-4">
+                    <i class="bi bi-truck text-gold" style="font-size: 2.5rem;"></i>
+                    <h5 class="fw-bold mt-3" style="font-family: Georgia, serif;">Insured Delivery</h5>
+                    <p class="text-muted small mb-0">
+                        Fully insured shipping + COD option pura India me.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,200 @@
+﻿@model JewelleryCommerce.Web.Models.ViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon bg-success-subtle text-success">
+                    <i class="bi bi-currency-rupee"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Revenue</small>
+                    <h4 class="fw-bold mb-0">₹ @Model.TotalRevenue.ToString("N0")</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon bg-primary-subtle text-primary">
+                    <i class="bi bi-receipt"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Orders</small>
+                    <h4 class="fw-bold mb-0">@Model.TotalOrders</h4>
+                    @if (Model.PendingOrders > 0)
+                    {
+                        <small class="text-warning">@Model.PendingOrders pending</small>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon bg-warning-subtle text-warning">
+                    <i class="bi bi-shop"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Vendors</small>
+                    <h4 class="fw-bold mb-0">@Model.TotalVendors</h4>
+                    @if (Model.PendingVendors > 0)
+                    {
+                        <small class="text-danger">@Model.PendingVendors pending</small>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card stat-card">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon bg-info-subtle text-info">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Products</small>
+                    <h4 class="fw-bold mb-0">@Model.TotalProducts</h4>
+                    @if (Model.PendingProducts > 0)
+                    {
+                        <small class="text-warning">@Model.PendingProducts pending</small>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Commission + Customers -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-muted">Platform Commission Earned</small>
+                        <h3 class="fw-bold text-gold mb-0">₹ @Model.TotalCommission.ToString("N0")</h3>
+                    </div>
+                    <i class="bi bi-piggy-bank text-gold" style="font-size: 2.5rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-muted">Total Customers</small>
+                        <h3 class="fw-bold mb-0">@Model.TotalCustomers</h3>
+                    </div>
+                    <i class="bi bi-people text-primary" style="font-size: 2.5rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Recent Orders -->
+    <div class="col-lg-7">
+        <div class="card stat-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <strong><i class="bi bi-clock-history"></i> Recent Orders</strong>
+                <a href="/Admin/Orders" class="small text-gold text-decoration-none">View all →</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-clean mb-0">
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.RecentOrders.Any())
+                        {
+                            @foreach (var o in Model.RecentOrders)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="/Admin/Orders/Details/@o.Id" class="text-decoration-none fw-semibold">
+                                            @o.OrderNumber
+                                        </a>
+                                        <div class="small text-muted">@o.CreatedAt.ToString("dd MMM, hh:mm tt")</div>
+                                    </td>
+                                    <td>@o.CustomerName</td>
+                                    <td class="fw-bold">₹ @o.TotalAmount.ToString("N0")</td>
+                                    <td><span class="badge @GetStatusBadge(o.Status)">@o.Status</span></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4" class="text-center text-muted py-4">No orders yet</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Vendors -->
+    <div class="col-lg-5">
+        <div class="card stat-card">
+            <div class="card-header bg-white">
+                <strong><i class="bi bi-trophy"></i> Top Vendors</strong>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-clean mb-0">
+                    <thead>
+                        <tr>
+                            <th>Shop</th>
+                            <th>Products</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.TopVendors.Any())
+                        {
+                            @foreach (var v in Model.TopVendors)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@v.ShopName</td>
+                                    <td>@v.ProductCount</td>
+                                    <td class="fw-bold text-gold">₹ @v.Revenue.ToString("N0")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="3" class="text-center text-muted py-4">No vendors yet</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusBadge(string status) => status switch
+    {
+        "Pending" => "bg-warning text-dark",
+        "Confirmed" => "bg-info text-dark",
+        "Packed" => "bg-primary",
+        "Shipped" => "bg-secondary",
+        "Delivered" => "bg-success",
+        "Cancelled" => "bg-danger",
+        "Returned" => "bg-dark",
+        _ => "bg-secondary"
+    };
+}

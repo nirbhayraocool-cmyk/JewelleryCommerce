@@ -1,0 +1,139 @@
+﻿@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Vendors";
+    var statusFilter = ViewBag.StatusFilter as string;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card stat-card">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="d-flex gap-2">
+            <a href="/Admin/Vendors" class="btn btn-sm @(string.IsNullOrEmpty(statusFilter) ? "btn-gold" : "btn-outline-secondary")">
+                All
+            </a>
+            <a href="/Admin/Vendors?status=Pending" class="btn btn-sm @(statusFilter == "Pending" ? "btn-gold" : "btn-outline-secondary")">
+                Pending
+            </a>
+            <a href="/Admin/Vendors?status=Approved" class="btn btn-sm @(statusFilter == "Approved" ? "btn-gold" : "btn-outline-secondary")">
+                Approved
+            </a>
+            <a href="/Admin/Vendors?status=Suspended" class="btn btn-sm @(statusFilter == "Suspended" ? "btn-gold" : "btn-outline-secondary")">
+                Suspended
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-clean mb-0">
+            <thead>
+                <tr>
+                    <th>Shop</th>
+                    <th>Owner</th>
+                    <th>GST</th>
+                    <th>Products</th>
+                    <th>Commission</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var v in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="fw-bold">@v.ShopName</div>
+                                <small class="text-muted">Joined @v.CreatedAt.ToString("dd MMM yyyy")</small>
+                            </td>
+                            <td>
+                                <div>@v.FullName</div>
+                                <small class="text-muted">@v.UserEmail</small>
+                            </td>
+                            <td>@(v.GstNumber ?? "—")</td>
+                            <td>@v.ProductCount</td>
+                            <td>
+                                <form method="post" asp-action="UpdateCommission" class="d-flex gap-1">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@v.Id" />
+                                    <input type="number" name="rate" value="@v.CommissionRate"
+                                           min="0" max="50" step="0.5" class="form-control form-control-sm"
+                                           style="width: 70px;" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">✓</button>
+                                </form>
+                            </td>
+                            <td>
+                                <span class="badge @GetVendorBadge((int)v.Status)">
+                                    @v.Status
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                @if ((int)v.Status == 0)
+                                {
+                                    <form method="post" asp-action="Approve" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@v.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <i class="bi bi-check"></i> Approve
+                                        </button>
+                                    </form>
+                                    <form method="post" asp-action="Reject" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@v.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-x"></i> Reject
+                                        </button>
+                                    </form>
+                                }
+                                else if ((int)v.Status == 1)
+                                {
+                                    <form method="post" asp-action="Suspend" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@v.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-warning"
+                                                onclick="return confirm('Suspend this vendor?')">
+                                            <i class="bi bi-pause-circle"></i> Suspend
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-action="Approve" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@v.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-success">
+                                            <i class="bi bi-check"></i> Re-Activate
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">No vendors found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@functions {
+    string GetVendorBadge(int status) => status switch
+    {
+        0 => "bg-warning text-dark",    // Pending
+        1 => "bg-success",               // Approved
+        2 => "bg-danger",                // Rejected
+        3 => "bg-secondary",             // Suspended
+        _ => "bg-secondary"
+    };
+}

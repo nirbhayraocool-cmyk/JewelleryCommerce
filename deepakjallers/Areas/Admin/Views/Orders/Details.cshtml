@@ -1,0 +1,110 @@
+﻿@model JewelleryCommerce.Web.Models.Entities.Order
+@{
+    ViewData["Title"] = "Order " + Model.OrderNumber;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<a href="/Admin/Orders" class="btn btn-sm btn-outline-secondary mb-3">
+    <i class="bi bi-arrow-left"></i> Back
+</a>
+
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="card stat-card mb-3">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <strong>@Model.OrderNumber</strong>
+                <span class="badge bg-info text-dark">@Model.Status</span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-clean mb-0">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Vendor</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in Model.Items)
+                        {
+                            var img = i.Product.Images.FirstOrDefault(x => x.IsPrimary)?.ImageUrl
+                            ?? i.Product.Images.FirstOrDefault()?.ImageUrl
+                            ?? "https://via.placeholder.com/50";
+                            <tr>
+                                <td>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <img src="@img" style="width: 45px; height: 45px; object-fit: cover;"
+                                             class="rounded" />
+                                        <div>
+                                            <div class="fw-semibold">@i.Product.Title</div>
+                                            <small class="text-muted">@i.Product.Purity</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@i.Vendor.ShopName</td>
+                                <td>₹ @i.Price.ToString("N0")</td>
+                                <td>@i.Quantity</td>
+                                <td class="fw-bold">₹ @((i.Price * i.Quantity).ToString("N0"))</td>
+                                <td><span class="badge bg-light text-dark border">@i.Status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-white text-end">
+                <strong class="fs-5">Total: <span class="text-gold">₹ @Model.TotalAmount.ToString("N0")</span></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Update Status -->
+        <div class="card stat-card mb-3">
+            <div class="card-header bg-white"><strong>Update Status</strong></div>
+            <div class="card-body">
+                <form method="post" asp-action="UpdateStatus">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <select name="status" class="form-select mb-2">
+                        @foreach (var s in Enum.GetNames(typeof(JewelleryCommerce.Web.Models.Entities.OrderStatus)))
+                        {
+                            <option value="@s" selected="@(s == Model.Status.ToString())">@s</option>
+                        }
+                    </select>
+                    <button class="btn btn-gold w-100">Update Status</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Customer -->
+        <div class="card stat-card mb-3">
+            <div class="card-header bg-white"><strong>Customer</strong></div>
+            <div class="card-body small">
+                <strong>@Model.CustomerName</strong><br />
+                <i class="bi bi-telephone"></i> @Model.Phone<br />
+                <i class="bi bi-geo-alt"></i> @Model.ShippingAddress<br />
+                <i class="bi bi-pin-map"></i> @Model.Pincode
+            </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="card stat-card">
+            <div class="card-header bg-white"><strong>Payment</strong></div>
+            <div class="card-body small">
+                Method: <strong>@Model.PaymentMode</strong><br />
+                Amount: <strong>₹ @Model.TotalAmount.ToString("N0")</strong><br />
+                Placed: @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+            </div>
+        </div>
+    </div>
+</div>

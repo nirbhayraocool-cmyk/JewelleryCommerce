@@ -1,0 +1,101 @@
+﻿@model List<JewelleryCommerce.Web.Models.Entities.Category>
+@{
+    ViewData["Title"] = "Categories";
+    var counts = ViewBag.ProductCounts as Dictionary<int, int> ?? new();
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="card stat-card">
+            <div class="card-header bg-white"><strong>Add Category</strong></div>
+            <div class="card-body">
+                <form method="post" asp-action="Create">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold">Name</label>
+                        <input name="name" class="form-control" placeholder="Gold" required />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold">Slug</label>
+                        <input name="slug" class="form-control" placeholder="gold" required />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold">Image URL (optional)</label>
+                        <input name="imageUrl" class="form-control" placeholder="https://..." />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Display Order</label>
+                        <input name="displayOrder" type="number" value="0" class="form-control" />
+                    </div>
+                    <button class="btn btn-gold w-100">
+                        <i class="bi bi-plus-circle"></i> Add Category
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card stat-card">
+            <div class="card-header bg-white"><strong>All Categories</strong></div>
+            <div class="card-body p-0">
+                <table class="table table-clean mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Slug</th>
+                            <th>Products</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model)
+                        {
+                            var count = counts.ContainsKey(c.Id) ? counts[c.Id] : 0;
+                            <tr>
+                                <td>@c.DisplayOrder</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(c.ImageUrl))
+                                    {
+                                        <img src="@c.ImageUrl" style="width: 45px; height: 45px; object-fit: cover;"
+                                             class="rounded" />
+                                    }
+                                </td>
+                                <td class="fw-semibold">@c.Name</td>
+                                <td><code>@c.Slug</code></td>
+                                <td>@count</td>
+                                <td class="text-end">
+                                    <form method="post" asp-action="Delete" class="d-inline"
+                                          onsubmit="return confirm('Delete category?')">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@c.Id" />
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

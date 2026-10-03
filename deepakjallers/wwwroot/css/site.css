@@ -1,0 +1,79 @@
+:root {
+    --gold: #c9a227;
+    --gold-dark: #a8841c;
+    --cream: #fdfaf3;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.text-gold {
+    color: var(--gold) !important;
+}
+
+.bg-gold {
+    background-color: var(--gold) !important;
+}
+
+.bg-cream {
+    background-color: var(--cream) !important;
+}
+
+.btn-gold {
+    background-color: var(--gold);
+    border-color: var(--gold);
+    color: #fff;
+    font-weight: 600;
+}
+
+    .btn-gold:hover,
+    .btn-gold:focus {
+        background-color: var(--gold-dark);
+        border-color: var(--gold-dark);
+        color: #fff;
+    }
+
+.btn-outline-gold {
+    color: var(--gold);
+    border-color: var(--gold);
+    font-weight: 600;
+}
+
+    .btn-outline-gold:hover {
+        background-color: var(--gold);
+        color: #fff;
+    }
+
+.navbar-nav .nav-link:hover {
+    color: var(--gold) !important;
+}
+
+.product-img {
+    height: 260px;
+    object-fit: cover;
+    transition: transform .3s;
+}
+
+.card:hover .product-img {
+    transform: scale(1.05);
+}
+
+.category-img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.badge-gold {
+    background-color: var(--gold);
+    color: #fff;
+}
+
+.footer-link {
+    color: #adb5bd;
+    text-decoration: none;
+}
+
+    .footer-link:hover {
+        color: var(--gold);
+    }

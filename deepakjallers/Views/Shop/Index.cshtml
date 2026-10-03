@@ -1,0 +1,321 @@
+﻿@model JewelleryCommerce.Web.Models.ShopViewModel
+@{
+    ViewData["Title"] = "Shop";
+}
+
+<!-- Breadcrumb -->
+<div class="bg-cream py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-muted">Home</a>
+                </li>
+                <li class="breadcrumb-item active text-gold" aria-current="page">Shop</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Page Header -->
+<div class="container py-4">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2 class="fw-bold mb-1" style="font-family: Georgia, serif;">All Jewellery</h2>
+            <p class="text-muted mb-0 small">
+                Showing <strong>@Model.Products.Count</strong> of @Model.TotalCount products
+            </p>
+        </div>
+        <div class="col-md-6 mt-3 mt-md-0">
+            <div class="d-flex justify-content-md-end align-items-center gap-2">
+                <label class="text-muted small mb-0">Sort by:</label>
+                <select class="form-select form-select-sm" style="max-width: 200px;"
+                        onchange="applySort(this.value)">
+                    <option value="popular" selected="@(Model.SortBy == "popular")">Popular</option>
+                    <option value="newest" selected="@(Model.SortBy == "newest")">Newest First</option>
+                    <option value="price_low" selected="@(Model.SortBy == "price_low")">Price: Low to High</option>
+                    <option value="price_high" selected="@(Model.SortBy == "price_high")">Price: High to Low</option>
+                    <option value="rating" selected="@(Model.SortBy == "rating")">Top Rated</option>
+                </select>
+                <button class="btn btn-outline-secondary btn-sm d-lg-none" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
+                    <i class="bi bi-funnel"></i> Filters
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container pb-5">
+    <div class="row g-4">
+
+        <!-- ============ SIDEBAR FILTERS ============ -->
+        <aside class="col-lg-3 d-none d-lg-block">
+            <form method="get" id="filterForm">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold"><i class="bi bi-funnel"></i> Filters</h6>
+                        <a href="/Shop" class="small text-decoration-none text-gold">Clear All</a>
+                    </div>
+                    <div class="card-body p-0">
+
+                        <!-- Category -->
+                        <div class="p-3 border-bottom">
+                            <h6 class="fw-bold small text-uppercase mb-3">Category</h6>
+                            @foreach (var c in Model.Categories)
+                            {
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="cat"
+                                           value="@c.Slug" id="cat_@c.Id"
+                                           checked="@(Model.CategorySlug == c.Slug)"
+                                           onchange="document.getElementById('filterForm').submit()" />
+                                    <label class="form-check-label d-flex justify-content-between w-100"
+                                           for="cat_@c.Id">
+                                        <span>@c.Name</span>
+                                        <small class="text-muted">(@c.ProductCount)</small>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Price -->
+                        <div class="p-3 border-bottom">
+                            <h6 class="fw-bold small text-uppercase mb-3">Price Range</h6>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <input type="number" class="form-control form-control-sm"
+                                           name="minPrice" placeholder="Min" value="@Model.MinPrice" />
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" class="form-control form-control-sm"
+                                           name="maxPrice" placeholder="Max" value="@Model.MaxPrice" />
+                                </div>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onclick="setPrice(0,5000)">₹0 - ₹5K</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onclick="setPrice(5000,20000)">₹5K - ₹20K</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onclick="setPrice(20000,50000)">₹20K - ₹50K</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onclick="setPrice(50000,'')">₹50K+</button>
+                            </div>
+                        </div>
+
+                        <!-- Metal -->
+                        <div class="p-3 border-bottom">
+                            <h6 class="fw-bold small text-uppercase mb-3">Metal</h6>
+                            @foreach (var m in new[] { "Gold", "Silver", "Diamond", "Platinum" })
+                            {
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="metal"
+                                           value="@m" id="metal_@m"
+                                           checked="@(Model.MetalTypes.Contains(m))" />
+                                    <label class="form-check-label" for="metal_@m">@m</label>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Vendors -->
+                        <div class="p-3 border-bottom">
+                            <h6 class="fw-bold small text-uppercase mb-3">Sellers</h6>
+                            @foreach (var v in Model.Vendors)
+                            {
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="vendor"
+                                           value="@v.Id" id="vendor_@v.Id"
+                                           checked="@(Model.VendorIds.Contains(v.Id))" />
+                                    <label class="form-check-label d-flex justify-content-between w-100"
+                                           for="vendor_@v.Id">
+                                        <span>@v.ShopName</span>
+                                        <small class="text-muted">(@v.ProductCount)</small>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="p-3">
+                            <button type="submit" class="btn btn-gold w-100">
+                                <i class="bi bi-funnel"></i> Apply Filters
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </aside>
+
+        <!-- ============ PRODUCT GRID ============ -->
+        <div class="col-lg-9">
+
+            <!-- Active filter chips -->
+            @if (!string.IsNullOrEmpty(Model.CategorySlug) || Model.MetalTypes.Any())
+            {
+                <div class="mb-3 d-flex flex-wrap gap-2">
+                    @if (!string.IsNullOrEmpty(Model.CategorySlug))
+                    {
+                        <span class="badge bg-light text-dark border">
+                            Category: @Model.CategorySlug
+                        </span>
+                    }
+                    @foreach (var m in Model.MetalTypes)
+                    {
+                        <span class="badge bg-light text-dark border">@m</span>
+                    }
+                </div>
+            }
+
+            @if (Model.Products.Any())
+            {
+                <div class="row g-4">
+                    @foreach (var p in Model.Products)
+                    {
+                        var discount = p.Mrp > p.Price
+                            ? (int)Math.Round((1 - (double)(p.Price / p.Mrp)) * 100) : 0;
+
+                        <div class="col-xl-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100 position-relative">
+                                <div class="position-relative overflow-hidden">
+                                    @if (p.IsBestseller)
+                                    {
+                                        <span class="badge badge-gold position-absolute top-0 start-0 m-2">
+                                            BESTSELLER
+                                        </span>
+                                    }
+                                    else if (discount > 0)
+                                    {
+                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2">
+                                            @discount% OFF
+                                        </span>
+                                    }
+                                    <button class="btn btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2">
+                                        <i class="bi bi-heart"></i>
+                                    </button>
+                                    <a asp-controller="Product" asp-action="Details" asp-route-slug="@p.Slug">
+                                        <img src="@p.ImageUrl" class="card-img-top product-img" alt="@p.Title" />
+                                    </a>
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <small class="text-muted text-uppercase" style="font-size: 0.7rem;">
+                                        @p.VendorName
+                                    </small>
+                                    <h6 class="fw-bold mt-1 mb-2" style="font-family: Georgia, serif;">
+                                        <a asp-controller="Product" asp-action="Details" asp-route-slug="@p.Slug"
+                                           class="text-dark text-decoration-none">@p.Title</a>
+                                    </h6>
+                                    <div class="mb-1">
+                                        <span class="text-gold fw-bold fs-5">₹ @p.Price.ToString("N0")</span>
+                                        @if (discount > 0)
+                                        {
+                                            <span class="text-muted text-decoration-line-through ms-1 small">
+                                                ₹ @p.Mrp.ToString("N0")
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="text-muted small mb-2">
+                                        <i class="bi bi-star-fill text-warning"></i> @p.Rating.ToString("0.0")
+                                        <span class="text-muted">(@p.ReviewCount)</span>
+                                        · @p.Weight g · @p.Purity
+                                    </div>
+                                    <button class="btn btn-gold w-100 mt-auto">
+                                        <i class="bi bi-bag-plus"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Pagination -->
+                @if (Model.TotalPages > 1)
+                {
+                    <nav class="mt-5">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" href="@BuildPageUrl(Model.CurrentPage - 1)">
+                                    &laquo;
+                                </a>
+                            </li>
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link @(i == Model.CurrentPage ? "bg-gold border-0" : "")"
+                                       href="@BuildPageUrl(i)">@i</a>
+                                </li>
+                            }
+                            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                                <a class="page-link" href="@BuildPageUrl(Model.CurrentPage + 1)">
+                                    &raquo;
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                }
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+                    <h5 class="mt-3">No products found</h5>
+                    <p class="text-muted">Try changing your filters</p>
+                    <a href="/Shop" class="btn btn-gold mt-2">Clear Filters</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Filter Offcanvas -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-bold"><i class="bi bi-funnel"></i> Filters</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <div class="p-3 border-bottom">
+            <h6 class="fw-bold small text-uppercase mb-3">Category</h6>
+            @foreach (var c in Model.Categories)
+            {
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="m_cat" value="@c.Slug" id="m_cat_@c.Id" />
+                    <label class="form-check-label d-flex justify-content-between w-100" for="m_cat_@c.Id">
+                        <span>@c.Name</span>
+                        <small class="text-muted">(@c.ProductCount)</small>
+                    </label>
+                </div>
+            }
+        </div>
+        <div class="p-3">
+            <button class="btn btn-gold w-100" data-bs-dismiss="offcanvas">Apply Filters</button>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string BuildPageUrl(int page)
+    {
+        var qs = Context.Request.Query
+            .Where(kv => kv.Key != "page")
+            .SelectMany(kv => kv.Value.Select(v => $"{kv.Key}={Uri.EscapeDataString(v ?? "")}"))
+            .ToList();
+        qs.Add($"page={page}");
+        return "/Shop?" + string.Join("&", qs);
+    }
+}
+
+@section Scripts {
+    <script>
+        function setPrice(min, max) {
+            document.querySelector('input[name="minPrice"]').value = min ?? '';
+            document.querySelector('input[name="maxPrice"]').value = max ?? '';
+        }
+        function applySort(val) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('sort', val);
+            url.searchParams.set('page', '1');
+            window.location.href = url.toString();
+        }
+    </script>
+}

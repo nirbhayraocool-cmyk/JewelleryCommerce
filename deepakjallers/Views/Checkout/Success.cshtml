@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Order Placed";
+    var orderNumber = ViewBag.OrderNumber as string;
+    var orderId = (int)ViewBag.OrderId;
+    var total = (decimal)ViewBag.TotalAmount;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+
+            <div class="card border-0 shadow-sm p-5">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                </div>
+
+                <h2 class="fw-bold mb-2" style="font-family: Georgia, serif;">
+                    Order Placed Successfully!
+                </h2>
+                <p class="text-muted">
+                    Thank you for shopping with Deepak Jewellers.
+                    Your order will be delivered in 5-7 business days.
+                </p>
+
+                <div class="bg-cream rounded p-3 my-4">
+                    <div class="mb-2">
+                        <small class="text-muted">Order Number</small><br />
+                        <strong class="fs-5">@orderNumber</strong>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Total Amount (COD)</small><br />
+                        <strong class="fs-5 text-gold">₹ @total.ToString("N0")</strong>
+                    </div>
+                    <div>
+                        <small class="text-muted">Payment Method</small><br />
+                        <strong>Cash on Delivery</strong>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-center flex-wrap">
+                    <a asp-controller="Account" asp-action="OrderDetails" asp-route-id="@orderId"
+                       class="btn btn-gold">
+                        <i class="bi bi-receipt"></i> View Order
+                    </a>
+                    <a asp-controller="Shop" asp-action="Index" class="btn btn-outline-gold">
+                        <i class="bi bi-bag"></i> Continue Shopping
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
