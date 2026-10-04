@@ -3,6 +3,54 @@
     ViewData["Title"] = "Home";
     var categories = ViewBag.Categories as List<JewelleryCommerce.Web.Models.Entities.Category>;
 }
+<div id="heroSlider" class="carousel slide"
+     data-bs-ride="carousel"
+     data-bs-interval="3000"
+     data-bs-pause="false"
+     data-bs-wrap="true">
+    <div class="carousel-inner">
+
+        <!-- SLIDE 1: GOLD -->
+        <div class="carousel-item active">
+            <a asp-controller="Shop" asp-action="Index" asp-route-cat="gold">
+                <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=1920&q=80"
+                     class="d-block w-100 slider-image" alt="Gold" />
+            </a>
+        </div>
+
+        <!-- SLIDE 2: SILVER -->
+        <div class="carousel-item">
+            <a asp-controller="Shop" asp-action="Index" asp-route-cat="silver">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/065/839/993/small/golden-jewelry-with-pearls-and-diamonds-photo.jpeg"
+                     class="d-block w-100 slider-image object-fit-cover" alt="Silver" />
+            </a>
+        </div>
+
+        <!-- SLIDE 3: DIAMOND -->
+        <div class="carousel-item">
+            <a asp-controller="Shop" asp-action="Index" asp-route-cat="diamond">
+                <img src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=1920&q=80"
+                     class="d-block w-100 slider-image" alt="Diamond" />
+            </a>
+        </div>
+
+        
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroSlider" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="2"></button>
+    </div>
+</div>
+
 
 <!-- HERO -->
 <section class="bg-cream py-5">
@@ -19,11 +67,11 @@
                     Gold, Silver aur Diamond — India ke verified vendors se.
                     Hallmarked quality, transparent pricing aur Cash on Delivery.
                 </p>
-                <div class="d-flex gap-3 mt-4 flex-wrap">
-                    <a asp-controller="Shop" asp-action="Index" class="btn btn-gold btn-lg px-4">
+                <div class="d-flex gap-3 mt-4 ">
+                    <a asp-controller="Shop" asp-action="Index" class="btn btn-gold btn-group-sm px-4">
                         Shop Collection <i class="bi bi-arrow-right"></i>
                     </a>
-                    <a href="#categories" class="btn btn-outline-gold btn-lg px-4">Explore Categories</a>
+                    <a href="#categories" class="btn btn-outline-gold btn-group-sm px-4">Explore Categories</a>
                 </div>
             </div>
             <div class="col-lg-6 text-center">
@@ -34,30 +82,34 @@
     </div>
 </section>
 
-<!-- TRUST STRIP -->
-<section class="bg-cream border-top border-bottom py-4">
-    <div class="container">
-        <div class="row g-4 text-center">
-            <div class="col-md-3 col-6">
-                <i class="bi bi-patch-check text-gold fs-1"></i>
-                <h6 class="fw-bold mt-2 mb-0">Hallmarked</h6>
-                <small class="text-muted">BIS Certified</small>
-            </div>
-            <div class="col-md-3 col-6">
-                <i class="bi bi-truck text-gold fs-1"></i>
-                <h6 class="fw-bold mt-2 mb-0">Free Shipping</h6>
-                <small class="text-muted">Above ₹5,000</small>
-            </div>
-            <div class="col-md-3 col-6">
-                <i class="bi bi-cash-coin text-gold fs-1"></i>
-                <h6 class="fw-bold mt-2 mb-0">COD Available</h6>
-                <small class="text-muted">Pay on Delivery</small>
-            </div>
-            <div class="col-md-3 col-6">
-                <i class="bi bi-arrow-repeat text-gold fs-1"></i>
-                <h6 class="fw-bold mt-2 mb-0">Easy Returns</h6>
-                <small class="text-muted">15 Days Policy</small>
-            </div>
+<!-- ============================================
+     FULL WIDTH VIDEO SECTION
+     ============================================ -->
+<section class="video-section position-relative">
+    <video class="w-100 video-bg" autoplay muted loop playsinline
+           poster="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1920">
+        <source src="https://www.pexels.com/download/video/8849053/" type="video/mp4" />
+        <!-- Fallback image agar video load na ho -->
+        <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1920"
+             class="w-100 video-bg" alt="Jewellery Model" />
+    </video>
+
+    <!-- Overlay Content -->
+    <div class="video-overlay">
+        <div class="container text-center text-white">
+            <span class="badge bg-white text-gold border border-warning mb-3 px-3 py-2">
+                ◆ New Collection 2026
+            </span>
+            <h2 class="display-4 fw-bold mb-3" style="font-family: Georgia, serif;">
+                Elegance in Every Detail
+            </h2>
+            <p class="fs-5 mb-4 mx-auto" style="max-width: 600px;">
+                Har piece ek kahani kehti hai. Discover our curated collection
+                of hallmarked gold, silver aur diamond jewellery.
+            </p>
+            <a asp-controller="Shop" asp-action="Index" class="btn btn-gold btn-lg px-5">
+                <i class="bi bi-bag"></i> Explore Collection
+            </a>
         </div>
     </div>
 </section>
@@ -175,41 +227,209 @@
     </div>
 </section>
 
-<!-- WHY CHOOSE US -->
-<section class="py-5">
+
+<!-- ============================================
+     VISIT OUR STORE — BACKGROUND IMAGE
+     ============================================ -->
+<section class="store-section">
+    <div class="store-overlay">
+        <div class="container">
+            <div class="row align-items-center g-5">
+
+                <!-- LEFT: Info -->
+                <div class="col-lg-6 text-white">
+                    <span class="badge bg-white text-gold border border-warning mb-3 px-3 py-2">
+                        ◆ Visit Us
+                    </span>
+                    <h2 class="display-4 fw-bold mb-4" style="font-family: Georgia, serif;">
+                        Experience Jewellery <br />
+                        <span class="text-gold">In Person</span>
+                    </h2>
+                    <p class="fs-5 mb-4 text-white-50">
+                        Hamare flagship store me aake live collection dekho,
+                        touch karo, try karo. Personal shopping assistant
+                        aapki har pasand samajh lega.
+                    </p>
+
+                    <div class="store-info-item mb-3">
+                        <i class="bi bi-geo-alt-fill text-gold fs-4"></i>
+                        <div>
+                            <small class="text-white-50 d-block">Address</small>
+                            <strong>123, MG Road, Fort, Mumbai — 400001</strong>
+                        </div>
+                    </div>
+
+                    <div class="store-info-item mb-3">
+                        <i class="bi bi-clock-fill text-gold fs-4"></i>
+                        <div>
+                            <small class="text-white-50 d-block">Opening Hours</small>
+                            <strong>Mon-Sat: 10:00 AM — 8:00 PM</strong>
+                            <br />
+                            <small class="text-white-50">Sunday: Closed</small>
+                        </div>
+                    </div>
+
+                    <div class="store-info-item mb-4">
+                        <i class="bi bi-telephone-fill text-gold fs-4"></i>
+                        <div>
+                            <small class="text-white-50 d-block">Phone</small>
+                            <strong>+91 98765 43210</strong>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="https://maps.google.com" target="_blank"
+                           class="btn btn-gold btn-lg px-4">
+                            <i class="bi bi-geo-alt"></i> Get Directions
+                        </a>
+                        <a asp-controller="Home" asp-action="Contact"
+                           class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-telephone"></i> Call Us
+                        </a>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Feature cards -->
+                <div class="col-lg-6">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="store-feature-card">
+                                <i class="bi bi-gem text-gold"></i>
+                                <h5 class="fw-bold text-white mt-2 mb-1">Live Collection</h5>
+                                <p class="text-white-50 small mb-0">
+                                    500+ designs try karne ke liye available
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="store-feature-card">
+                                <i class="bi bi-person-badge text-gold"></i>
+                                <h5 class="fw-bold text-white mt-2 mb-1">Expert Staff</h5>
+                                <p class="text-white-50 small mb-0">
+                                    Certified gemologists on-site
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="store-feature-card">
+                                <i class="bi bi-shield-check text-gold"></i>
+                                <h5 class="fw-bold text-white mt-2 mb-1">Free Valuation</h5>
+                                <p class="text-white-50 small mb-0">
+                                    Apni old jewellery free evaluate karwao
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="store-feature-card">
+                                <i class="bi bi-cup-hot text-gold"></i>
+                                <h5 class="fw-bold text-white mt-2 mb-1">Comfort Lounge</h5>
+                                <p class="text-white-50 small mb-0">
+                                    Chai/coffee with personal shopping
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ============================================
+     EXPLORE MORE TIMELESS DESIGNS — 3 CARDS
+     ============================================ -->
+<section class="py-5 explore-section">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="fw-bold" style="font-family: Georgia, serif;">Why Deepak Jewellers?</h2>
+            <span class="badge bg-white text-gold border border-warning mb-3 px-3 py-2">
+                ◆ Curated For You
+            </span>
+            <h2 class="fw-bold" style="font-family: Georgia, serif;">
+                Explore More Timeless Designs
+            </h2>
             <div class="bg-gold mx-auto mt-2" style="width:60px;height:3px;"></div>
+            <p class="text-muted mt-3 mx-auto" style="max-width: 600px;">
+                Har design ek kahani kehta hai. Handpicked pieces jo generations tak yaad rakhe jaayenge.
+            </p>
         </div>
+
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100 text-center p-4">
-                    <i class="bi bi-shield-check text-gold" style="font-size: 2.5rem;"></i>
-                    <h5 class="fw-bold mt-3" style="font-family: Georgia, serif;">Verified Vendors</h5>
-                    <p class="text-muted small mb-0">
-                        Har seller KYC aur GST verified hai. Fake products ki tension khatam.
-                    </p>
+
+            <!-- CARD 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 product-gallery-card">
+                    <div class="position-relative overflow-hidden">
+                        <span class="badge badge-gold position-absolute top-0 start-0 m-2" style="z-index:10;">CLASSIC</span>
+                        <button class="btn btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2" style="z-index:10;">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                        <div id="explore1" class="carousel slide card-carousel" data-bs-ride="carousel" data-bs-interval="2500" data-bs-pause="false">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://plus.unsplash.com/premium_photo-1673758910861-4324e19876cf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDMxfHx8ZW58MHx8fHx8" class="d-block w-100 card-slider-image" alt="Design 1" />
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1643237251986-c0bde5848c5b?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 card-slider-image" alt="Design 2" />
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1740198321633-ee397a554c8d?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 card-slider-image" alt="Design 3" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100 text-center p-4">
-                    <i class="bi bi-currency-rupee text-gold" style="font-size: 2.5rem;"></i>
-                    <h5 class="fw-bold mt-3" style="font-family: Georgia, serif;">Best Price Guarantee</h5>
-                    <p class="text-muted small mb-0">
-                        Multiple sellers compare karke sabse best rate milta hai.
-                    </p>
+
+            <!-- CARD 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 product-gallery-card">
+                    <div class="position-relative overflow-hidden">
+                        <span class="badge bg-danger position-absolute top-0 start-0 m-2" style="z-index:10;">25% OFF</span>
+                        <button class="btn btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2" style="z-index:10;">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                        <div id="explore2" class="carousel slide card-carousel" data-bs-ride="carousel" data-bs-interval="2500" data-bs-pause="false">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://images.unsplash.com/photo-1585490315405-5d5fc6582a85?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 card-slider-image" alt="Design 4" />
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1638999681387-8a10aa05aeb3?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 card-slider-image" alt="Design 5" />
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://plus.unsplash.com/premium_photo-1777135580751-c43c4cd4a916?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 card-slider-image" alt="Design 6" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100 text-center p-4">
-                    <i class="bi bi-truck text-gold" style="font-size: 2.5rem;"></i>
-                    <h5 class="fw-bold mt-3" style="font-family: Georgia, serif;">Insured Delivery</h5>
-                    <p class="text-muted small mb-0">
-                        Fully insured shipping + COD option pura India me.
-                    </p>
+
+            <!-- CARD 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 product-gallery-card">
+                    <div class="position-relative overflow-hidden">
+                        <span class="badge badge-gold position-absolute top-0 start-0 m-2" style="z-index:10;">NEW</span>
+                        <button class="btn btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2" style="z-index:10;">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                        <div id="explore3" class="carousel slide card-carousel" data-bs-ride="carousel" data-bs-interval="2500" data-bs-pause="false">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://plus.unsplash.com/premium_photo-1674498703954-21a6a5a3fb16?q=80&w=388&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 card-slider-image" alt="Diamond" />
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://plus.unsplash.com/premium_photo-1674639044611-40e65551bb0d?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 card-slider-image" alt="Diamond 2" />
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://plus.unsplash.com/premium_photo-1740020266177-d4cae0fd36b0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D" class="d-block w-100 card-slider-image" alt="Diamond 3" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </section>

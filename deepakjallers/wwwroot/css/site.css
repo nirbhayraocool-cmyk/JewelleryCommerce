@@ -1,6 +1,6 @@
 :root {
     --gold: #c9a227;
-    --gold-dark: #a8841c;
+    --gold-dark: #d3b55c;
     --cream: #fdfaf3;
 }
 
@@ -27,8 +27,7 @@ body {
     font-weight: 600;
 }
 
-    .btn-gold:hover,
-    .btn-gold:focus {
+    .btn-gold:hover, .btn-gold:focus {
         background-color: var(--gold-dark);
         border-color: var(--gold-dark);
         color: #fff;
@@ -77,3 +76,228 @@ body {
     .footer-link:hover {
         color: var(--gold);
     }
+/*slide */
+/* Full width hero slider */
+/* Smooth slide transition */
+.carousel-item {
+    transition: transform 0.8s ease-in-out !important;
+}
+
+.slider-image {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+@media (max-width: 991.98px) {
+    .slider-image {
+        height: 400px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .slider-image {
+        height: 250px;
+    }
+}
+/*video*/
+/* ============================================
+   FULL WIDTH VIDEO SECTION
+   ============================================ */
+.video-section {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    background: #000;
+}
+
+.video-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 100%);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+    .video-overlay h2 {
+        text-shadow: 2px 2px 12px rgba(0,0,0,0.5);
+    }
+
+    .video-overlay p {
+        text-shadow: 1px 1px 6px rgba(0,0,0,0.4);
+    }
+
+@media (max-width: 991.98px) {
+    .video-section {
+        height: 500px;
+    }
+
+    .video-overlay .display-4 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .video-section {
+        height: 400px;
+    }
+
+    .video-overlay .display-4 {
+        font-size: 1.5rem;
+    }
+
+    .video-overlay p {
+        font-size: 0.95rem !important;
+    }
+
+    .video-overlay .btn-lg {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
+
+
+/* ============================================
+   VISIT OUR STORE SECTION
+   ============================================ */
+/* ============================================
+   VISIT OUR STORE SECTION
+   ============================================ */
+.store-section {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden; /* scroll rokta hai */
+    background-image: url('https://static.vecteezy.com/system/resources/thumbnails/054/676/427/small/elegant-jewelry-piece-displayed-on-a-decorative-plate-alongside-a-delicate-rose-at-sunset-free-photo.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.store-overlay {
+    background: linear-gradient(135deg, rgba(15, 15, 15, 0.72) 0%, rgba(30, 20, 10, 0.75) 100%);
+    padding: 5rem 0;
+    width: 100%;
+}
+
+.store-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    word-break: break-word; /* long text wrap */
+    overflow-wrap: anywhere;
+}
+
+    .store-info-item i {
+        flex-shrink: 0;
+        margin-top: 4px;
+    }
+
+    .store-info-item > div {
+        min-width: 0; /* flexbox overflow fix */
+        flex: 1;
+    }
+
+.store-feature-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(201, 162, 39, 0.25);
+    border-radius: 12px;
+    padding: 1.25rem;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+    word-break: break-word;
+}
+
+    .store-feature-card:hover {
+        background: rgba(201, 162, 39, 0.12);
+        border-color: var(--gold);
+        transform: translateY(-4px);
+    }
+
+    .store-feature-card i {
+        font-size: 2rem;
+    }
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 991.98px) {
+    .store-overlay {
+        padding: 3rem 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .store-overlay {
+        padding: 2.5rem 1rem;
+    }
+
+    .store-section h2.display-4 {
+        font-size: 1.75rem;
+    }
+
+    .store-section .fs-5 {
+        font-size: 1rem !important;
+    }
+
+    .store-feature-card {
+        padding: 1rem;
+    }
+
+        .store-feature-card h5 {
+            font-size: 1rem;
+        }
+
+        .store-feature-card p {
+            font-size: 0.8rem;
+        }
+
+        .store-feature-card i {
+            font-size: 1.5rem;
+        }
+}
+
+@media (max-width: 575.98px) {
+    .store-overlay {
+        padding: 2rem 0.75rem;
+    }
+
+    .store-section h2.display-4 {
+        font-size: 1.5rem;
+    }
+
+    .store-info-item {
+        gap: 0.75rem;
+    }
+
+        .store-info-item i {
+            font-size: 1.25rem !important;
+        }
+}
+/*last*/
+/* Explore Section */
+.explore-section {
+    background: linear-gradient(180deg, #ffffff 0%, #fdfaf3 100%);
+    border-top: 1px solid #f0e8d0;
+}
